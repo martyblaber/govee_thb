@@ -1,0 +1,10 @@
+{
+    "database":{
+        "host": "192.168.1.2",
+        "port": 3306,
+        "database": "trogadog",
+        "table": "govee_thb",
+        "username": "govee",
+        "password": "DragonsHaveLowHumidity1!"
+    }
+}
