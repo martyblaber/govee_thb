@@ -163,23 +163,25 @@ class Govee_Device(object):
         self.ave_dict['dewpoint'] = self.average(self.dewpoints)
         self.ave_dict['battery'] = self.average(self.batteries)
         
-    def get_averages(self,for_db=False):
+    def get_averages(self):
         if not self.ready():
             return None
 
         return self.ave_dict
     
+    def print_header(self):
+        print("{:18s}{:22s}{:11s}{:11s}{:11s}{:11s}".format("MAC ADDRESS",
+                    "Date", "Temp(C)", "RH(%)", "Dew pt.(C)", "Battery(%)"))
+        
     def print_averages(self):
         if not self.ready():
             return None
         
         ad = self.get_averages()
-        mac = mac_int_to_str()
-        print("%15s%22s%11s%11s%11s%11s\n"%{"MAC ADDRESS", 
-                    "Date", "Temp(C)", "RH(%)", "Dew pt.(C)", "Battery(%)"})
-        print("%15s%22s%11.2f%11.2f%11.2f%11.2f\n"%{mac,
+        mac = mac_int_to_str(ad['mac_address'])
+        print("{:18s}{:22s}{:<11.2f}{:<11.2f}{:<11.2f}{:<11.2f}".format(mac,
                     ad['average_date'], ad['temperature'],ad['humidity'],
-                    ad['dewpoint'],ad['battery']})
+                    ad['dewpoint'],ad['battery']))
     
 if __name__ == "__main__":
     debug = True
@@ -190,6 +192,7 @@ if __name__ == "__main__":
         input_lines = sys.stdin.readline
     
     devices = {}
+    print_header=True
     
     for line in iter(input_lines, ""):
         try:
@@ -201,6 +204,9 @@ if __name__ == "__main__":
         
         if odict['MAC_INT'] not in devices.keys():
             devices[odict['MAC_INT']] = Govee_Device(odict, n_measurements_to_average = 30)
+            if print_header:
+                devices[odict['MAC_INT']].print_header()
+                print_header = False
         else:
             this_device = devices[odict['MAC_INT']]
             this_device.add_row(odict)
