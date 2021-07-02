@@ -26,7 +26,7 @@ print("We're going to use %s"%tablename)
 print("Opening DB Connection")
 gdb = govee_db.GoveeDB(db_settings)
 
-debug = True
+debug = False
 if debug:
     f = open("tmp.txt", "r")
     input_lines = f.readline
